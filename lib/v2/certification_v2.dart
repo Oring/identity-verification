@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:uuid/uuid.dart';
@@ -13,10 +14,10 @@ class CertificationV2 extends StatelessWidget {
     var uuid = const Uuid();
     var request = '''
 PortOne.requestIdentityVerification({
-  storeId: 'store-aa6d5a55-df32-42d8-8d98-ca6efefb2b76',
+  storeId: '${dotenv.env['STORE_ID']}',
   identityVerificationId: `identity-verification-${uuid.v4()}`,
-  channelKey: 'channel-key-29eae0b1-a323-4cec-99d2-1c02d4b3b025',
-  redirectUrl: 'portone://complete',
+  channelKey: '${dotenv.env['CHANNEL_KEY']}',
+  redirectUrl: '${dotenv.env['V2_REDIRECT_URL']}',
 })
 ''';
 

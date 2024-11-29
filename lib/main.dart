@@ -3,8 +3,10 @@ import 'package:id_verification/v1/certification.dart';
 import 'package:id_verification/v1/certification_result.dart';
 import 'package:id_verification/v2/certification_v2.dart';
 import 'package:id_verification/v2/certification_result_v2.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
 
