@@ -11,8 +11,12 @@ dependencies:
     sdk: flutter
     
   cupertino_icons: ^1.0.8
-  iamport_flutter: ^0.10.19
   http: ^1.1.0
+
+  # V1 Flutter SDK
+  iamport_flutter: ^0.10.19
+
+  # V2 Flutter SDK는 지원하지 않아, webview와 브라우저 SDK를 사용하여 구현
   webview_flutter: ^4.7.0
   url_launcher: ^6.2.5
   uuid: ^4.3.3

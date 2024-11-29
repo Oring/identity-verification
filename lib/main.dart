@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:id_verification/screens/certification.dart';
-import 'package:id_verification/screens/certification_result.dart';
-import 'package:id_verification/screens/certification_v2.dart';
-import 'package:id_verification/screens/certification_result_v2.dart';
+import 'package:id_verification/v1/certification.dart';
+import 'package:id_verification/v1/certification_result.dart';
+import 'package:id_verification/v2/certification_v2.dart';
+import 'package:id_verification/v2/certification_result_v2.dart';
 
 void main() {
   runApp(const MyApp());
@@ -23,8 +23,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const HomeScreen(),
         '/certification': (context) => const Certification(),
-        '/certification-v2': (context) => const CertificationV2(),
         '/certification-result': (context) => const CertificationResult(),
+        '/certification-v2': (context) => const CertificationV2(),
         '/certification-result-v2': (context) => const CertificationResultV2(),
       },
     );
