@@ -2,54 +2,63 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class CertificationResult extends StatefulWidget {
-  const CertificationResult({super.key});
+class CertificationResultV2 extends StatefulWidget {
+  const CertificationResultV2({super.key});
 
   @override
-  State<CertificationResult> createState() => _CertificationResultState();
+  State<CertificationResultV2> createState() => _CertificationResultV2State();
 }
 
-class _CertificationResultState extends State<CertificationResult> {
+class _CertificationResultV2State extends State<CertificationResultV2> {
   String? userName;
-  String? birthday;
-  String? phone;
+  String? birthDate;
+  String? phoneNumber;
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final Map<String, String> result =
-          ModalRoute.of(context)!.settings.arguments as Map<String, String>;
+      final Map<String, dynamic> result =
+          ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
       fetchUserInfo(result);
     });
   }
 
-  Future<void> fetchUserInfo(Map<String, String> result) async {
+  Future<void> fetchUserInfo(Map<String, dynamic> result) async {
     try {
       final response = await http.post(
         Uri.parse(
-            'http://10.0.2.2:8080/api/resources/identity-verifications/v1'),
+            'http://10.0.2.2:8080/api/resources/identity-verifications/v2'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(result),
         /* 응답 예시
         {
-          "imp_uid": "imp_945956592472",
-          "success": "true",
-          "merchant_uid": "mid_1732862948223"
+          "identityVerificationId": "identity-verification-c4015047-d0bd-417b-984a-0ccce36c35c5",
+          "identityVerificationTxId": "01937702-2765-b741-5d38-7576e62d901b",
+          "transactionType": "IDENTITY_VERIFICATION"
         }
         */
-        // body: jsonEncode({'imp_uid': result['imp_uid']}),
       );
 
       if (response.statusCode == 200) {
         final data = jsonDecode(utf8.decode(response.bodyBytes));
         setState(() {
           userName = data['name'];
-          birthday = data['birthday'];
-          phone = data['phone'];
+          birthDate = data['birthDate'];
+          phoneNumber = data['phoneNumber'];
           isLoading = false;
         });
+      } else {
+        // 실패 얼럿 띄우기
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('인증 정보 조회 실패 [${response.body}]'),
+          ),
+        );
+
+        setState(() => isLoading = false);
       }
     } catch (e) {
       setState(() => isLoading = false);
@@ -58,13 +67,12 @@ class _CertificationResultState extends State<CertificationResult> {
 
   @override
   Widget build(BuildContext context) {
-    final result =
-        ModalRoute.of(context)!.settings.arguments as Map<String, String>;
-    final success = result['success'] == 'true';
+    final Map<String, dynamic> result =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('본인인증 결과'),
+        title: const Text('본인인증 결과 v2'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         automaticallyImplyLeading: false,
       ),
@@ -72,15 +80,15 @@ class _CertificationResultState extends State<CertificationResult> {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            Icon(
-              success ? Icons.check_circle : Icons.error,
-              color: success ? Colors.green : Colors.red,
+            const Icon(
+              Icons.check_circle,
+              color: Colors.green,
               size: 80,
             ),
             const SizedBox(height: 16),
-            Text(
-              success ? '본인인증에 성공하였습니다' : '본인인증에 실패하였습니다',
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            const Text(
+              '본인인증이 완료되었습니다',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 32),
             Text('인증 결과: $result'),
@@ -91,8 +99,8 @@ class _CertificationResultState extends State<CertificationResult> {
               Column(
                 children: [
                   _buildInfoRow('이름', userName!),
-                  _buildInfoRow('생년월일', birthday!),
-                  _buildInfoRow('연락처', phone!),
+                  _buildInfoRow('생년월일', birthDate!),
+                  _buildInfoRow('연락처', phoneNumber!),
                 ],
               ),
             const Spacer(),
