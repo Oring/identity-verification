@@ -16,12 +16,6 @@ V1_M_REDIRECT_URL=http://example.com # V1 리디렉션 URL
 V2_REDIRECT_URL=portone://complete # V2 리디렉션 URL
 ```
 
-## 연동
-- KG이니시스 통합본인인증 서비스 테스트모드 설정 및 연동 가이드 [[바로가기](https://help.portone.io/content/inicis#8_%ED%85%8C%EC%8A%A4%ED%8A%B8-%EC%97%B0%EB%8F%99)]
-- (v1) KG이니시스 통합본인인증 서비스 연동 매뉴얼 [[바로가기](https://developers.portone.io/opi/ko/extra/identity-verification/v1/all/readme?v=v1)] [[Github](https://github.com/iamport/iamport_flutter)]
-- (v2) KG이니시스 통합본인인증 서비스 연동 매뉴얼 [[바로가기](https://developers.portone.io/opi/ko/extra/identity-verification/readme-v2?v=v2)] [[Github](https://github.com/portone-io/portone-sample)]
-
-
 ## 환경
 
 ```bash
@@ -80,3 +74,39 @@ flutter doctor --verbose
 [√] Network resources
     • All expected network resources are available.
 ```
+
+
+## 연동 매뉴얼 & 샘플코드
+- KG이니시스 통합본인인증 서비스 테스트모드 설정 및 연동 가이드 [[바로가기](https://help.portone.io/content/inicis#8_%ED%85%8C%EC%8A%A4%ED%8A%B8-%EC%97%B0%EB%8F%99)]
+- (**V1**) KG이니시스 통합본인인증 서비스 연동 매뉴얼 
+    - [바로가기](https://developers.portone.io/opi/ko/extra/identity-verification/v1/all/readme?v=v1)
+    - [Flutter SDK - Github](https://github.com/iamport/iamport_flutter)
+    - [Flutter 샘플코드 - Github](https://github.com/iamport/iamport_flutter/tree/main/example)
+- (**V2**) KG이니시스 통합본인인증 서비스 연동 매뉴얼
+    - [바로가기](https://developers.portone.io/opi/ko/extra/identity-verification/readme-v2?v=v2)
+    - [Flutter 샘플코드 - Github](https://github.com/portone-io/portone-sample/tree/main/flutter)
+
+
+## Question?
+### 1. 왜 V1, V2 두 가지 버전이 있는가?
+- 모놀리식 아키텍처(V1)에서 MSA(V2)로의 전환
+- V1과 V2가 언제까지 함께 운영될지 모르는 상황에서 서비스를 계속해서 발전시켜 나가기 위해,
+- V1과 V2 양쪽 모두 연동 작업을 위한 추상화용 마이크로서비스인 TGS(Transaction Gateway Service)를 도입
+- 즉, **포트원 내부적인 이유(개선)로 인해 두 버전이 존재하는 것**임
+    > 참고: https://developers.portone.io/blog/posts/2024-03-25-tgs
+
+### 2. V1, V2 각각의 장단점은?
+- **V2** 장점
+    - 신속한 업데이트 ( 최신 결제 기능을 빠르게 제공할 가능성 )
+    - 안정성, 주요 정보를 풍부하게 제공
+
+- **V2** 단점
+    - flutter sdk가 없음 ( webview와 브라우저 SDK를 사용하여 구현해야함 )
+
+- **V1** 장점
+    - flutter sdk가 있음
+
+- **V1** 단점
+    - 언제까지 기능이 업데이트 될 지, 운영될지 모름
+    - 그 외, V2의 장점들이 V1 에게는 단점
+> 참고: https://developers.portone.io/opi/ko/integration/start/v2/readme?v=v2
